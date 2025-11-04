@@ -1,5 +1,6 @@
 package models;
 import LinkedList.DoublyLinkedList;
+import LinkedList.Node;
 
 /**
  * Aisle model which is stored inside a floor area and contains a list of shelves.
@@ -23,6 +24,8 @@ public class Aisle {
         this.length = length;
         this.width = width;
         this.temperature = temperature;
+        this.shelves = new DoublyLinkedList<>();
+
 
     }
 
@@ -112,6 +115,25 @@ public class Aisle {
      */
     public void addShelf(Shelf shelf) {
         shelves.insertAtTail(shelf);
+    }
+    public String listAllShelves(){
+    String result = "";
+        if(shelves != null && !shelves.isEmpty()) {
+            Node<Shelf> current = shelves.getHead();
+            while (current != null) {
+                Shelf shelf = current.getValue();
+                result += shelf.allShelfItems() + "\n";
+                current = current.getNext();
+            }
+        }
+        else{
+            result += "No shelves on this aisle. \n";
+        }
+        result += "Aisle Name: " + aisleName
+                + " | Total Shelves: " + shelves.getSize()
+                + "\n";
+
+        return result;
     }
 
 }

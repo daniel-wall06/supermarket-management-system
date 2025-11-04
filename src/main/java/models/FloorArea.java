@@ -20,6 +20,7 @@ public class FloorArea {
     public FloorArea(String title, String level) {
         this.title = title;
         this.level = level;
+        this.aisles = new DoublyLinkedList<>();
     }
 
     /**
@@ -77,6 +78,28 @@ public class FloorArea {
     public void addAisle(Aisle aisle) {
         aisles.insertAtTail(aisle);
     }
+    public String listAllAisles() {
+        String result = "";
+
+        if (aisles != null && !aisles.isEmpty()) {
+            Node<Aisle> current = aisles.getHead();
+            while (current != null) {
+                Aisle aisle = current.getValue();
+                result += aisle.listAllShelves() + "\n"; // reuse Aisle method
+                current = current.getNext();
+            }
+        } else {
+            result += "No aisles in this floor area.\n";
+        }
+
+        result += "Floor Area: " + title
+                + " | Level: " + level
+                + " | Total Aisles: " + (aisles != null ? aisles.getSize() : 0)
+                + "\n";
+
+        return result;
+    }
+
 
 
 }

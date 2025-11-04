@@ -1,4 +1,6 @@
-package LinkedList;
+package linkedlist;
+
+import java.io.Serializable;
 
 /**
  * Node used in a doubly linked list.
@@ -10,7 +12,8 @@ package LinkedList;
  *
  */
 
-public class Node <T> {
+public class Node <T> implements Serializable {
+    private static final long serialVersionUID = 1L;
     private T value;
     private Node<T> next=null, previous=null;
 

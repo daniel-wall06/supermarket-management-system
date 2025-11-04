@@ -1,16 +1,19 @@
 package models;
 
-import LinkedList.DoublyLinkedList;
-import LinkedList.Node;
-import models.Aisle;
+import linkedlist.DoublyLinkedList;
+import linkedlist.Node;
+import java.io.Serializable;
 
 /**
  * Floor Area model of a supermarket that contains multiple aisles.
  */
-public class FloorArea {
+public class FloorArea implements Serializable {
+    private static final long serialVersionUID = 1L;
     private String title;
     private String level;
     private DoublyLinkedList<Aisle> aisles;
+    private DoublyLinkedList<FloorArea> floorAreas;
+    private double totalValue = 0;
 
     /**
      * Constructs a new floor area with the specified title and level.
@@ -71,34 +74,51 @@ public class FloorArea {
         this.aisles = aisle;
     }
 
+    public DoublyLinkedList<FloorArea> getFloorAreas() {
+        return floorAreas;
+    }
+    public void setFloorAreas(DoublyLinkedList<FloorArea> floorAreas) {
+        this.floorAreas = floorAreas;
+    }
+
+    public double getTotalValue() {
+        double total = 0.0;
+        Node<Aisle> current = aisles.getHead();
+        while (current != null) {
+            total += current.getValue().getTotalValue();
+            current = current.getNext();
+        }
+        return total;
+    }
+    public void setTotalValue(double totalValue) {
+        this.totalValue = totalValue;
+    }
+    public void updateTotalValue(double valueChange) {
+        totalValue += valueChange;
+    }
+
+
+    public void addFloorArea(FloorArea floorArea) {
+        floorAreas.insertAtTail(floorArea);
+    }
+
+
     /**
-     * Adds a new aisle to the end of the ailse list.
+     * Adds a new aisle to the end of the aisle list.
      * @param aisle the object Aisle to be added to the end of the list
      */
     public void addAisle(Aisle aisle) {
+        aisle.setParentFloorArea(this);
         aisles.insertAtTail(aisle);
+        updateTotalValue(aisle.getTotalValue());
     }
-    public String listAllAisles() {
-        String result = "";
 
-        if (aisles != null && !aisles.isEmpty()) {
-            Node<Aisle> current = aisles.getHead();
-            while (current != null) {
-                Aisle aisle = current.getValue();
-                result += aisle.listAllShelves() + "\n"; // reuse Aisle method
-                current = current.getNext();
-            }
-        } else {
-            result += "No aisles in this floor area.\n";
-        }
-
-        result += "Floor Area: " + title
-                + " | Level: " + level
-                + " | Total Aisles: " + (aisles != null ? aisles.getSize() : 0)
-                + "\n";
-
-        return result;
+    @Override
+    public String toString() {
+        return title + " (" + level + ") - " + aisles.getSize() + " aisle(s), Total Value: €"
+                + String.format("%.2f", totalValue);
     }
+
 
 
 

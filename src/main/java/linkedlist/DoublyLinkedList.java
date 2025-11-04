@@ -1,5 +1,6 @@
-package LinkedList;
+package linkedlist;
 
+import java.io.Serializable;
 /**
  * Doubly Linked List implementation
  * <p>
@@ -8,7 +9,8 @@ package LinkedList;
  * @param <T> value stored in the list
  */
 
-public class DoublyLinkedList<T> {
+public class DoublyLinkedList<T> implements Serializable {
+    private static final long serialVersionUID = 1L;
     private Node<T> head;
     private Node<T> tail;
     private int size;
@@ -82,29 +84,13 @@ public class DoublyLinkedList<T> {
     public Node<T> getTail() {
         return tail;
     }
-    // TODO: Add delete functionality
-    /*public void deleteNode(Node<T> node){
-        if(node == null || isEmpty()){return;}
-        Node<T> prev = node.getPrevious();
-        Node<T> next = node.getNext();
 
-        if(prev == null){
-            head = next;
-        }
-        else{
-            prev.setNext(next);
-        }
-
-        if(next == null){
-            tail = prev;
-        }
-        else{
-            next.setPrevious(prev);
-        }
-        node.setNext(null);
-        node.setPrevious(null);
-
-    }*/
+    /**
+     * Deletes a given node.
+     * <p>If the node is the head or tail a new head or tail will be set with the next or previous node.</p>
+     * <p>The size field is updated to show the node was deleted.</p>
+     * @param node the node that will be deleted from the doublyLinkedList.
+     */
     public void deleteNode(Node<T> node){
         if(isEmpty() || node == null) return;
         if(node == head){
@@ -124,42 +110,34 @@ public class DoublyLinkedList<T> {
 
 
     }
+
+    /**
+     * Deletes a node using the value stored in the node as a reference.
+     * <p>This method calls the original deleteNode to delete the node that is equal to the specified value given.</p>
+     * @param value the value of the node specified by the user to be deleted.
+     */
     public void deleteByValue(T value) {
         if (isEmpty()) return;
+        deleteNode(search(value));
+    }
 
+    /**
+     * Resets linked lists by removing all references to nodes inside the list.
+     */
+    public void resetAll(){
+        head = null;
+        tail = null;
+    }
+
+    public Node<T> search(T value){
         Node<T> current = head;
         while (current != null) {
             if (current.getValue().equals(value)) {
-                deleteNode(current); // reuse existing logic
-                return;
+                return current;
             }
             current = current.getNext();
         }
-
+        return null;
     }
-    // TODO: Add search functionality
- 
-    //FIXME: NEED TO FIX TRAVERSAL METHOD
-    public String forwardTraversal(){
-        if(isEmpty()) return "";
-
-        String result = "";
-        Node<T> current = head;
-        while (current != null) {
-            result += current.getValue().toString() + " \n";
-            current = current.getNext();
-        }
-        return result;
-
-    }
-
-
-
-
-
-
-
-
-
 
 }

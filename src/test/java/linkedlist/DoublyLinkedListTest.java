@@ -1,4 +1,4 @@
-package LinkedList;
+package linkedlist;
 
 import models.FloorArea;
 import org.junit.jupiter.api.Test;

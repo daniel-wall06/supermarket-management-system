@@ -1,0 +1,8 @@
+FLOORAREA:test,test
+AISLE:test,10,10,Unrefrigerated
+SHELF:12
+GOOD:frozen,10.0,10,Refrigerated,123,10.0
+FLOORAREA:test2,2nd
+AISLE:qwer,12,1,Frozen
+SHELF:12
+GOOD:21,12.0,1,Frozen,12,10.0

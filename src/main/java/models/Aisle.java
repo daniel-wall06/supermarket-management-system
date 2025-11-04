@@ -1,16 +1,20 @@
 package models;
-import LinkedList.DoublyLinkedList;
-import LinkedList.Node;
+import linkedlist.DoublyLinkedList;
+import linkedlist.Node;
+import java.io.Serializable;
 
 /**
  * Aisle model which is stored inside a floor area and contains a list of shelves.
  */
-public class Aisle {
+public class Aisle implements Serializable{
+    private static final long serialVersionUID = 1L;
     private String aisleName;
     private int length;
     private int width;
     private String temperature;
     private DoublyLinkedList<Shelf> shelves;
+    private double totalValue = 0;
+    private FloorArea parentFloorArea;
 
     /**
      * Constructs an aisle with a name, dimensions, and temperature.
@@ -27,6 +31,9 @@ public class Aisle {
         this.shelves = new DoublyLinkedList<>();
 
 
+    }
+
+    public Aisle(String trim, int length) {
     }
 
     /**
@@ -109,12 +116,21 @@ public class Aisle {
         this.shelves = shelves;
     }
 
+    public void setParentFloorArea(FloorArea floorArea) {
+        this.parentFloorArea = floorArea;
+    }
+    public FloorArea getParentFloorArea() {
+        return parentFloorArea;
+    }
+
     /**
      * Add a new shelf to the end of the shelves linked list.
      * @param shelf the shelf to be added to the list.
      */
     public void addShelf(Shelf shelf) {
+        shelf.setParentAisle(this);
         shelves.insertAtTail(shelf);
+        updateTotalValue(shelf.getTotalValue());
     }
     public String listAllShelves(){
     String result = "";
@@ -135,5 +151,35 @@ public class Aisle {
 
         return result;
     }
+    public void resetShelves() {
+        Node<Shelf> current = shelves.getHead();
+        while (current != null) {
+            current.getValue().resetGoods();
+            current = current.getNext();
+        }
+        totalValue = 0;
+    }
+    public void updateTotalValue(double valueChange) {
+        totalValue += valueChange;
+        if (parentFloorArea != null) {
+            parentFloorArea.updateTotalValue(valueChange); // propagate up
+        }
+    }
 
+    @Override
+    public String toString() {
+        return aisleName + " [" + temperature + "] - " + shelves.getSize() + " shelf(s), Total Value: €"
+                + String.format("%.2f", totalValue);
+    }
+
+
+    public double getTotalValue() {
+        double total = 0.0;
+        Node<Shelf> current = shelves.getHead();
+        while (current != null) {
+            total += current.getValue().getTotalValue();
+            current = current.getNext();
+        }
+        return total;
+    }
 }

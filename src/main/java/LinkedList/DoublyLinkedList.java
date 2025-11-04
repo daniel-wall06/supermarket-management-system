@@ -11,6 +11,9 @@ package LinkedList;
 public class DoublyLinkedList<T> {
     private Node<T> head;
     private Node<T> tail;
+    private int size;
+
+
 
     /**
      * Checks if the list is empty
@@ -19,6 +22,10 @@ public class DoublyLinkedList<T> {
      */
     public boolean isEmpty() {
         return head == null; //checks if the list is empty, if the head is null list is empty
+    }
+
+    public int getSize() {
+        return size;
     }
 
 
@@ -36,6 +43,8 @@ public class DoublyLinkedList<T> {
             head.setPrevious(newNode);
             head = newNode;
         }
+        size++;
+
 
 
     }
@@ -54,6 +63,8 @@ public class DoublyLinkedList<T> {
             newNode.setPrevious(tail);
             tail = newNode;
         }
+        size++;
+
     }
 
     /**
@@ -72,9 +83,78 @@ public class DoublyLinkedList<T> {
         return tail;
     }
     // TODO: Add delete functionality
+    /*public void deleteNode(Node<T> node){
+        if(node == null || isEmpty()){return;}
+        Node<T> prev = node.getPrevious();
+        Node<T> next = node.getNext();
+
+        if(prev == null){
+            head = next;
+        }
+        else{
+            prev.setNext(next);
+        }
+
+        if(next == null){
+            tail = prev;
+        }
+        else{
+            next.setPrevious(prev);
+        }
+        node.setNext(null);
+        node.setPrevious(null);
+
+    }*/
+    public void deleteNode(Node<T> node){
+        if(isEmpty() || node == null) return;
+        if(node == head){
+            head = head.getNext();
+            if(head != null) head.setPrevious(null);
+        }
+        else if(node == tail){
+            tail = tail.getPrevious();
+            if(tail != null) tail.setNext(null);
+        }
+        else{
+            node.getPrevious().setNext(node.getNext());
+            node.getNext().setPrevious(node.getPrevious());
+        }
+        size--;
+
+
+
+    }
+    public void deleteByValue(T value) {
+        if (isEmpty()) return;
+
+        Node<T> current = head;
+        while (current != null) {
+            if (current.getValue().equals(value)) {
+                deleteNode(current); // reuse existing logic
+                return;
+            }
+            current = current.getNext();
+        }
+
+    }
     // TODO: Add search functionality
-    // TODO: Add traversal methods
-    // TODO: Add size tracking for quantities
+ 
+    //FIXME: NEED TO FIX TRAVERSAL METHOD
+    public String forwardTraversal(){
+        if(isEmpty()) return "";
+
+        String result = "";
+        Node<T> current = head;
+        while (current != null) {
+            result += current.getValue().toString() + " \n";
+            current = current.getNext();
+        }
+        return result;
+
+    }
+
+
+
 
 
 

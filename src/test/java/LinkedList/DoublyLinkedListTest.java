@@ -66,4 +66,35 @@ class DoublyLinkedListTest {
         assertSame(floorAreaLinkedList.getHead().getValue(), floorAreaLinkedList.getTail().getValue());
     }
 
+
+    @Test
+    void deleteHeadFromOneElementList() {
+        DoublyLinkedList<FloorArea>  floorAreaLinkedList = new DoublyLinkedList<>();
+        FloorArea dairy = new FloorArea("Dairy", "Ground Floor");
+
+
+        floorAreaLinkedList.insertAtHead(dairy);
+        floorAreaLinkedList.deleteByValue(dairy);
+        assertNull(floorAreaLinkedList.getHead());
+    }
+
+    @Test
+    void deleteNodeFromAnywhere(){
+        DoublyLinkedList<FloorArea>  floorAreaLinkedList = new DoublyLinkedList<>();
+        FloorArea dairy = new FloorArea("Dairy", "Ground Floor");
+        FloorArea fruitAndVeg = new FloorArea("Fruit", "First Floor");
+        FloorArea bread = new FloorArea("Bread", "Ground Floor");
+
+
+        floorAreaLinkedList.insertAtHead(dairy);
+        floorAreaLinkedList.insertAtHead(fruitAndVeg);
+        floorAreaLinkedList.insertAtTail(bread);
+
+
+
+        floorAreaLinkedList.deleteByValue(dairy);
+
+
+
+    }
 }

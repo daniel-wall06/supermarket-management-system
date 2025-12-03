@@ -10,6 +10,9 @@ import javafx.stage.Stage;
 import models.Aisle;
 import models.Shelf;
 
+/**
+ * Controller for the addShelf view - after the addShelf button is pressed
+ */
 public class AddShelfController {
 
     @FXML

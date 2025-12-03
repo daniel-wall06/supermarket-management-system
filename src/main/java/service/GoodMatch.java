@@ -1,7 +1,10 @@
 package service;
 
 import models.*;
-
+/**
+ * Represents a found good with its complete location in the supermarket.
+ * Used to display search results with hierarchical location information.
+ */
 public class GoodMatch {
     private final Good good;
     private final FloorArea floorArea;

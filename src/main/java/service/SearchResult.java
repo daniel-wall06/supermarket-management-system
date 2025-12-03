@@ -3,6 +3,9 @@ package service;
 import linkedlist.DoublyLinkedList;
 import linkedlist.Node;
 
+/**
+ * Shows the result of a search.
+ */
 public class SearchResult {
     private final String searchTerm;
     private final DoublyLinkedList<GoodMatch> matches = new DoublyLinkedList<>();
@@ -31,6 +34,10 @@ public class SearchResult {
         return matches.isEmpty();
     }
 
+    /**
+     * Use stringbuilder to display the results of the search
+     * @return the results for the search
+     */
     public String formatForDisplay() {
         StringBuilder sb = new StringBuilder();
         sb.append("Search Results for: \"").append(searchTerm).append("\"\n\n");

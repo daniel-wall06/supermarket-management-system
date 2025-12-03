@@ -5,6 +5,9 @@ import models.FloorArea;
 import models.Aisle;
 import models.Shelf;
 
+/**
+ * Stores separate doublylinkedlists for floor areas, aisles, and shelves
+ */
 public class LoadedData {
     public DoublyLinkedList<FloorArea> floorAreas = new DoublyLinkedList<>();
     public DoublyLinkedList<Aisle> aisles = new DoublyLinkedList<>();

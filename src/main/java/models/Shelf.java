@@ -6,8 +6,7 @@ import java.io.Serializable;
 /**
  *
  */
-public class Shelf implements Serializable {
-    private static final long serialVersionUID = 1L;
+public class Shelf   {
     private int shelfNumber;
     private DoublyLinkedList<Good> goodsList;
     private double totalValue = 0;

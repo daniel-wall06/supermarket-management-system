@@ -7,6 +7,9 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import models.FloorArea;
 
+/**
+ * Controller for the addFloorArea view
+ */
 public class AddFloorAreaController {
 
     @FXML
@@ -21,7 +24,6 @@ public class AddFloorAreaController {
     private SupermarketController mainController;
     private DoublyLinkedList<FloorArea> floorAreaList;
 
-    // Setter for main controller reference
     public void setMainController(SupermarketController mainController) {
         this.mainController = mainController;
     }
@@ -34,13 +36,11 @@ public class AddFloorAreaController {
         String title = floorAreaTitle.getText().trim();
         String level = floorAreaLevel.getText().trim();
         if (!title.isEmpty() && !level.isEmpty()&& mainController != null) {
-            // Create new FloorArea
             FloorArea newArea = new FloorArea(title, level);
 
             mainController.addFloorAreaToTree(newArea);
         }
 
-        // Close this AddFloorArea window
         Stage stage = (Stage) submitFloorArea.getScene().getWindow();
         stage.close();
     }

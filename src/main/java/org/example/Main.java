@@ -6,7 +6,9 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 
-
+/**
+ * Set up the primary stage for javafx GUI
+ */
 public class Main extends Application {
     public static Stage primaryStage;
     @Override

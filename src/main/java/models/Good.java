@@ -3,10 +3,9 @@ package models;
 import java.io.Serializable;
 
 /**
- *
+ *Good model of a good inside a shelf
  */
-public class Good implements Serializable {
-    private static final long serialVersionUID = 1L;
+public class Good   {
     private String description;
     private double weight;
     private double unitPrice;
@@ -14,6 +13,15 @@ public class Good implements Serializable {
     private String Temperature;
     private String photoURL;
 
+    /**
+     * Constructs a new good with the specified fields
+     * @param description description of the good
+     * @param weight the weight of the good
+     * @param quantityToAdd number of goods to be added to the shelf
+     * @param temperature the temperature the good should be stored
+     * @param photoURL url of image of the good
+     * @param unitPrice price of the good
+     */
     public Good(String description, double weight, int quantityToAdd, String temperature, String photoURL, double unitPrice) {
         this.description = description;
         this.weight = weight;
@@ -23,6 +31,9 @@ public class Good implements Serializable {
         this.unitPrice = unitPrice;
     }
 
+    /**
+     * Getters and Setters for all fields
+     */
     public String getDescription() {
         return description;
     }
@@ -64,6 +75,10 @@ public class Good implements Serializable {
         return unitPrice * quantityToAdd;
     }
 
+    /**
+     * ToString using the good fields
+     * @return string of the good
+     */
     @Override
     public String toString() {
         return description + " (" + weight + "g/ml)" +

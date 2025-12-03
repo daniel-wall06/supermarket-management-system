@@ -8,6 +8,9 @@ import javafx.stage.Stage;
 import models.Good;
 import models.Shelf;
 
+/**
+ * Add Good Controller for the addGood view
+ */
 public class AddGoodController {
 
     @FXML private TextField goodName;
@@ -27,13 +30,11 @@ public class AddGoodController {
 
     @FXML
     public void initialize() {
-        // Don't try to get stage here - it's too early
-        // Just set up the temperature menu
         setupTemperatureMenu();
     }
 
     private void setupTemperatureMenu() {
-        // Get the menu items and set their actions
+
         for (MenuItem item : goodTemperature.getItems()) {
             item.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
@@ -43,7 +44,6 @@ public class AddGoodController {
                 }
             });
         }
-        // Set default temperature display
         goodTemperature.setText("Temperature: " + selectedTemperature);
     }
 
@@ -55,7 +55,6 @@ public class AddGoodController {
         this.mainController = mainController;
     }
 
-    // New method for smart add mode
     public void enableSmartAddMode() {
         this.smartAddMode = true;
         submitGood.setText("Smart Add");
@@ -64,40 +63,30 @@ public class AddGoodController {
     @FXML
     public void submitGood(ActionEvent event) {
         try {
-            // Get the stage from the button now (when it's clicked, the scene is available)
             if (stage == null) {
                 stage = (Stage) submitGood.getScene().getWindow();
             }
-
-            // Validate inputs
             if (!validateInputs()) {
                 return;
             }
-
-            // Create the good object
             Good good = createGoodFromInputs();
-
             if (smartAddMode) {
-                // Use smart add logic
                 performSmartAdd(good);
             } else {
-                // Normal add to selected shelf
                 performNormalAdd(good);
             }
 
         } catch (Exception e) {
             showError("Error adding good: " + e.getMessage());
-            e.printStackTrace(); // Add this to see the full error
+            e.printStackTrace();
         }
     }
 
     private void performSmartAdd(Good good) {
         Shelf bestShelf = mainController.findBestShelfForGood(good);
-
         if (bestShelf != null) {
             bestShelf.addGood(good);
             mainController.addGoodToTree(good, bestShelf);
-
             showSuccess("Good smart added to:\n" +
                     "Shelf " + bestShelf.getShelfNumber() + " in " +
                     bestShelf.getParentAisle().getAisleName() + " -> " +
@@ -122,6 +111,10 @@ public class AddGoodController {
         stage.close();
     }
 
+    /**
+     * Using the inputs create a new Good to be used in either add Good or smart Add.
+     * @return
+     */
     private Good createGoodFromInputs() {
         String description = goodName.getText().trim();
         double weight = Double.parseDouble(goodSize.getText().trim());
@@ -133,14 +126,15 @@ public class AddGoodController {
         return new Good(description, weight, quantity, temperature, photoURL, unitPriceValue);
     }
 
+    /**
+     * Validate inputs to ensure correct values are inputted
+     * @return boolean value true or false
+     */
     private boolean validateInputs() {
-        // Check description
         if (goodName.getText().trim().isEmpty()) {
             showError("Please enter a description.");
             return false;
         }
-
-        // Check weight
         try {
             double weight = Double.parseDouble(goodSize.getText().trim());
             if (weight <= 0) {
@@ -152,7 +146,6 @@ public class AddGoodController {
             return false;
         }
 
-        // Check quantity
         try {
             int quantity = Integer.parseInt(quantityGood.getText().trim());
             if (quantity <= 0) {
@@ -164,7 +157,6 @@ public class AddGoodController {
             return false;
         }
 
-        // Check unit price
         try {
             double unitPriceValue = Double.parseDouble(unitPrice.getText().trim());
             if (unitPriceValue <= 0) {
@@ -179,6 +171,10 @@ public class AddGoodController {
         return true;
     }
 
+    /**
+     * Shows error message
+     * @param message
+     */
     private void showError(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
@@ -187,6 +183,10 @@ public class AddGoodController {
         alert.showAndWait();
     }
 
+    /**
+     * Show success message when good is added
+     * @param message
+     */
     private void showSuccess(String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Success");

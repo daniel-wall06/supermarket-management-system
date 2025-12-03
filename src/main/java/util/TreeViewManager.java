@@ -4,12 +4,15 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import models.*;
 import controller.SupermarketController;
-
+/**
+ * Manages the supermarket hierarchy display in the TreeView.
+ * Handles adding, updating, and displaying floor areas, aisles, shelves, and goods.
+ */
 public class TreeViewManager {
     private TreeView<String> treeView;
     private SupermarketController controller; // Add reference to controller
 
-    // Update constructor to accept controller
+
     public TreeViewManager(TreeView<String> treeView, SupermarketController controller) {
         this.treeView = treeView;
         this.controller = controller;
@@ -17,10 +20,7 @@ public class TreeViewManager {
     }
 
     private void initializeTree() {
-        // Calculate supermarket total using controller
-        double supermarketTotal = controller.getTotalSupermarketValue();
-        String rootText = String.format("Supermarket (Total Value: €%.2f)", supermarketTotal);
-        TreeItem<String> root = new TreeItem<>(rootText);
+        TreeItem<String> root = new TreeItem<>("Supermarket");
         root.setExpanded(true);
         treeView.setRoot(root);
     }
@@ -46,7 +46,7 @@ public class TreeViewManager {
         ObjectTreeItem newItem = new ObjectTreeItem(display);
         newItem.setStoredObject(floorArea);
         treeView.getRoot().getChildren().add(newItem);
-        updateSupermarketTotal(); // Update root after adding floor area
+        updateSupermarketTotal();
     }
 
     public void addAisle(Aisle aisle, FloorArea parentFloorArea) {
@@ -57,8 +57,6 @@ public class TreeViewManager {
             aisleItem.setStoredObject(aisle);
             parentItem.getChildren().add(aisleItem);
             parentItem.setExpanded(true);
-
-            // Update the floor area display to reflect new total value
             updateFloorAreaDisplay(parentFloorArea);
         }
     }
@@ -71,8 +69,6 @@ public class TreeViewManager {
             shelfItem.setStoredObject(shelf);
             aisleItem.getChildren().add(shelfItem);
             aisleItem.setExpanded(true);
-
-            // Update the aisle display to reflect new total value
             updateAisleDisplay(parentAisle);
         }
     }
@@ -80,7 +76,6 @@ public class TreeViewManager {
     public void addGood(Good good, Shelf parentShelf) {
         TreeItem<String> shelfItem = findTreeItemForShelf(parentShelf);
         if (shelfItem != null) {
-            // Check if good already exists
             TreeItem<String> existingItem = findExistingGood(shelfItem, good);
 
             if (existingItem != null) {
@@ -92,17 +87,14 @@ public class TreeViewManager {
                 shelfItem.getChildren().add(goodItem);
             }
 
-            // Update shelf display
             shelfItem.setValue(GoodDisplayFormatter.formatShelfDisplay(parentShelf));
             shelfItem.setExpanded(true);
 
-            // Update the parent aisle and floor area
             updateParentDisplays(parentShelf);
         }
     }
 
     private void updateParentDisplays(Shelf shelf) {
-        // Update aisle display
         Aisle parentAisle = shelf.getParentAisle();
         if (parentAisle != null) {
             updateAisleDisplay(parentAisle);
@@ -114,7 +106,6 @@ public class TreeViewManager {
         if (aisleItem != null) {
             aisleItem.setValue(GoodDisplayFormatter.formatAisleDisplay(aisle));
 
-            // Update parent floor area
             FloorArea parentFloorArea = aisle.getParentFloorArea();
             if (parentFloorArea != null) {
                 updateFloorAreaDisplay(parentFloorArea);
@@ -130,7 +121,7 @@ public class TreeViewManager {
         updateSupermarketTotal(); // Also update supermarket total
     }
 
-    // Add method to update supermarket total in root
+
     public void updateSupermarketTotal() {
         if (controller != null) {
             double supermarketTotal = controller.getTotalSupermarketValue();

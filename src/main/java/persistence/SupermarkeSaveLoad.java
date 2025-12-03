@@ -5,6 +5,9 @@ import linkedlist.Node;
 import models.*;
 import java.io.*;
 
+/**
+ * Save and load the data in the supermarket to a .txt file that can be loaded later
+ */
 public class SupermarkeSaveLoad {
     private static final String DATA_FILE = "supermarket_data.txt";
 

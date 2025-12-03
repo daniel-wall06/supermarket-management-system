@@ -6,3 +6,8 @@ FLOORAREA:test2,2nd
 AISLE:qwer,12,1,Frozen
 SHELF:12
 GOOD:21,12.0,1,Frozen,12,10.0
+FLOORAREA:fridge,firstFloor
+AISLE:fridge1,10,10,Refrigerated
+SHELF:1
+GOOD:fridgeGood,1000.0,10,Refrigerated,10,10.0
+GOOD:fridgeSmartAdd,10.0,10,Refrigerated,12,10.0

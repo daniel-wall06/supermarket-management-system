@@ -4,6 +4,9 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.TextInputDialog;
 import java.util.Optional;
 
+/**
+ * Show messages for Success, Errors and Warnings, text inputs, remove quantity and alerts.
+ */
 public class DialogService {
 
     public static void showWarning(String title, String message) {

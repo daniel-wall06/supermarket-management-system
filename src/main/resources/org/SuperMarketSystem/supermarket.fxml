@@ -9,7 +9,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.SupermarketController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="441.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.SupermarketController">
     <children>
         <HBox alignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="5.0">
             <children>
@@ -58,6 +58,13 @@
                         <Insets top="10.0" />
                     </VBox.margin>
                 </Button>
+                <Button fx:id="resetButton" onAction="#resetAllData" prefWidth="100.0" style="-fx-background-color: #ff4444; -fx-text-fill: white;" text="Reset All Data">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin></Button>
                 <Text text="------------------------">
                     <VBox.margin>
                         <Insets top="10.0" />
@@ -75,6 +82,6 @@
                 </Button>
             </children>
         </VBox>
-        <TreeView fx:id="treeView" layoutX="134.0" layoutY="28.0" prefHeight="372.0" prefWidth="466.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="134.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="28.0" />
+        <TreeView fx:id="treeView" layoutX="134.0" layoutY="28.0" prefHeight="397.0" prefWidth="466.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="134.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="28.0" />
     </children>
 </AnchorPane>

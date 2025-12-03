@@ -12,8 +12,8 @@ import javafx.stage.Stage;
 import models.*;
 import org.example.Main;
 import linkedlist.Node;
-import service.GoodSearchService;
-import service.ShelfAllocationService;
+import service.GoodSearch;
+import service.SmartAdd;
 import persistence.SupermarkeSaveLoad;
 import persistence.LoadedData;
 import util.TreeViewManager;
@@ -25,25 +25,23 @@ import java.util.Optional;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 
+/**
+ * Main controller that will control the main view of the application
+ */
 public class SupermarketController {
 
     @FXML
     private TreeView<String> treeView;
-    @FXML
-    private VBox sidebar;
+
 
     private static final Logger logger = Logger.getLogger(SupermarketController.class.getName());
 
     private DoublyLinkedList<FloorArea> floorAreaList = new DoublyLinkedList<>();
     private DoublyLinkedList<Aisle> aisleList = new DoublyLinkedList<>();
     private DoublyLinkedList<Shelf> shelfList = new DoublyLinkedList<>();
-
-    // Service instances
-    private GoodSearchService searchService = new GoodSearchService();
-    private ShelfAllocationService allocationService = new ShelfAllocationService();
+    private GoodSearch searchService = new GoodSearch();
+    private SmartAdd allocationService = new SmartAdd();
     private SupermarkeSaveLoad dataStore = new SupermarkeSaveLoad();
-
-    // Utility instances
     private TreeViewManager treeViewManager;
 
     @FXML
@@ -71,7 +69,7 @@ public class SupermarketController {
         this.shelfList = list;
     }
 
-    // Open AddFloorArea window
+
     @FXML
     public void addFloorArea(ActionEvent actionEvent) {
         try {
@@ -313,8 +311,6 @@ public class SupermarketController {
                     shelfItem.getChildren().remove(selected);
                 }
             }
-
-            // Update shelf display (this will cascade to update aisle and floor area)
             ((TreeViewManager.ObjectTreeItem) shelfItem).setValue(GoodDisplayFormatter.formatShelfDisplay(shelf));
 
             DialogService.showSuccess("Successfully removed " + qtyToRemove + " of " + targetGood.getDescription());
@@ -395,6 +391,9 @@ public class SupermarketController {
         saveData();
     }
 
+    /**
+     * Save the current data
+     */
     public void saveData() {
         try {
             dataStore.saveSupermarket(floorAreaList);
@@ -405,6 +404,9 @@ public class SupermarketController {
         }
     }
 
+    /**
+     * Load saved data
+     */
     @FXML
     public void loadData(ActionEvent actionEvent) {
         loadData();
@@ -417,21 +419,19 @@ public class SupermarketController {
                 return;
             }
 
-            // Clear existing data
             floorAreaList = new DoublyLinkedList<>();
             aisleList = new DoublyLinkedList<>();
             shelfList = new DoublyLinkedList<>();
             treeViewManager.clearTree();
 
-            // Load data using the persistence class
+
             LoadedData loadedData = dataStore.loadSupermarket();
 
-            // Update our lists with the loaded data
             this.floorAreaList = loadedData.floorAreas;
             this.aisleList = loadedData.aisles;
             this.shelfList = loadedData.shelves;
 
-            // Rebuild the tree view from loaded data
+
             rebuildTreeView();
 
             DialogService.showSuccess("Data loaded successfully from previous session!");
@@ -445,25 +445,20 @@ public class SupermarketController {
     }
 
     private void rebuildTreeView() {
-        // Rebuild the tree from loaded data
         Node<FloorArea> floorNode = floorAreaList.getHead();
         while (floorNode != null) {
             FloorArea floorArea = floorNode.getValue();
             treeViewManager.addFloorArea(floorArea);
-
-            // Rebuild aisles for this floor area
             Node<Aisle> aisleNode = floorArea.getAisles().getHead();
             while (aisleNode != null) {
                 Aisle aisle = aisleNode.getValue();
                 treeViewManager.addAisle(aisle, floorArea);
 
-                // Rebuild shelves for this aisle
                 Node<Shelf> shelfNode = aisle.getShelves().getHead();
                 while (shelfNode != null) {
                     Shelf shelf = shelfNode.getValue();
                     treeViewManager.addShelf(shelf, aisle);
 
-                    // Rebuild goods for this shelf
                     Node<Good> goodNode = shelf.getGoodsList().getHead();
                     while (goodNode != null) {
                         Good good = goodNode.getValue();
@@ -477,6 +472,11 @@ public class SupermarketController {
             floorNode = floorNode.getNext();
         }
     }
+
+    /**
+     * Get the total value of all floorareas in the supermarket
+     * @return double of the total supermarket value
+     */
     public double getTotalSupermarketValue() {
         double total = 0.0;
         Node<FloorArea> current = floorAreaList.getHead();
@@ -486,4 +486,53 @@ public class SupermarketController {
         }
         return total;
     }
+
+    /**
+     * Reset each linkedlist, with warning before hand
+     */
+    @FXML
+    public void resetAllData(ActionEvent actionEvent) {
+        // Show confirmation dialog
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Reset All Data");
+        alert.setHeaderText("Reset All Data");
+        alert.setContentText("Are you sure you want to reset ALL data? This action cannot be undone!");
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            try {
+                floorAreaList.resetAll();
+                aisleList.resetAll();
+                shelfList.resetAll();
+
+                treeViewManager.clearTree();
+                resetToInitialState();
+                DialogService.showSuccess("All data has been reset successfully!");
+
+            } catch (Exception e) {
+                logger.log(Level.SEVERE, "Error resetting data", e);
+                DialogService.showError("Error resetting data: " + e.getMessage());
+            }
+        }
+    }
+
+    private void resetToInitialState() {
+        floorAreaList = new DoublyLinkedList<>();
+        aisleList = new DoublyLinkedList<>();
+        shelfList = new DoublyLinkedList<>();
+        treeViewManager = new TreeViewManager(treeView, this);
+
+        updateSupermarketTotalInTree();
+    }
+
+    /**
+     * Update the total value of the supermarket
+     */
+    public void updateSupermarketTotalInTree() {
+        double supermarketTotal = getTotalSupermarketValue();
+        String rootText = String.format("Supermarket (Total Value:€%.2f)", supermarketTotal);
+        treeView.getRoot().setValue(rootText);
+    }
+
+
 }

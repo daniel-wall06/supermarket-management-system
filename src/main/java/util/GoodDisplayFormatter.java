@@ -2,6 +2,9 @@ package util;
 
 import models.*;
 
+/**
+ * Configure the format of each model to be displayed in the treeview
+ */
 public class GoodDisplayFormatter {
 
     public static String formatGoodDisplay(Good good) {
@@ -21,14 +24,14 @@ public class GoodDisplayFormatter {
     }
     public static String formatAisleDisplay(Aisle aisle) {
         double totalValue = aisle.getTotalValue();
-        return String.format("%s (Total Value: €%.2f)",
+        return String.format("%s (Total Value: €%.2f) | Temp - " + aisle.getTemperature() + " | Aisle Dimensions (LxW) - " + aisle.getLength() + " x " + aisle.getWidth(),
                 aisle.getAisleName(),
                 totalValue);
     }
 
     public static String formatFloorAreaDisplay(FloorArea floorArea) {
         double totalValue = floorArea.getTotalValue();
-        return String.format("%s (Total Value: €%.2f)",
+        return String.format("%s (Total Value: €%.2f) | Level - " + floorArea.getLevel(),
                 floorArea.getTitle(),
                 totalValue);
     }

@@ -8,6 +8,9 @@ import javafx.stage.Stage;
 import models.Aisle;
 import models.FloorArea;
 
+/**
+ * Controller for the addAisle view.
+ */
 public class AddAisleController {
 
     private SupermarketController mainController;

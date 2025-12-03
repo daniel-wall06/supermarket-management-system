@@ -4,58 +4,64 @@ import linkedlist.DoublyLinkedList;
 import linkedlist.Node;
 import models.*;
 
-public class ShelfAllocationService {
+/**
+ * Smart Add finds a suitable shelf for a given good
+ */
+public class SmartAdd {
 
     public Shelf findBestShelfForGood(Good good, DoublyLinkedList<FloorArea> floorAreas) {
         if (good == null || floorAreas == null) {
             return null;
         }
-
-
+        /**
+         * Find Shelves that already have goods
+         */
         Shelf existingShelf = findShelfWithExistingGood(good, floorAreas);
         if (existingShelf != null) {
             System.out.println("Smart Add: Found existing good location");
             return existingShelf;
         }
 
-        // Strategy 2: Find shelf with matching temperature and similar goods
-        Shelf similarShelf = findShelfWithSimilarGoods(good, floorAreas);
-        if (similarShelf != null) {
-            System.out.println("Smart Add: Found shelf with similar goods");
-            return similarShelf;
-        }
-
-        // Strategy 3: Find any shelf with matching temperature
+        /**
+         * Find shelves that have matching temperatures to the good
+         */
         Shelf tempShelf = findShelfWithMatchingTemperature(good.getTemperature(), floorAreas);
         if (tempShelf != null) {
             System.out.println("Smart Add: Found shelf with matching temperature");
             return tempShelf;
         }
 
-        // Strategy 4: Find first available shelf
+        /**
+         * If none of the above are found, find the first available shelf
+         */
         Shelf firstShelf = findFirstAvailableShelf(floorAreas);
         if (firstShelf != null) {
             System.out.println("Smart Add: Using first available shelf");
             return firstShelf;
         }
-
+        /**
+         * If no shelf is found at all
+         */
         System.out.println("Smart Add: No suitable shelf found");
         return null;
     }
 
+    /**
+     * Check all the shelves
+     * @param newGood good to be added
+     * @param floorAreas doublylinkedlist of all floor areas
+     * @return a shelf if one is found, null otherwise
+     */
     private Shelf findShelfWithExistingGood(Good newGood, DoublyLinkedList<FloorArea> floorAreas) {
         Node<FloorArea> floorNode = floorAreas.getHead();
         while (floorNode != null) {
             FloorArea floorArea = floorNode.getValue();
             Node<Aisle> aisleNode = floorArea.getAisles().getHead();
-
             while (aisleNode != null) {
                 Aisle aisle = aisleNode.getValue();
                 Node<Shelf> shelfNode = aisle.getShelves().getHead();
-
                 while (shelfNode != null) {
                     Shelf shelf = shelfNode.getValue();
-                    // Check if this shelf has the exact same good
                     Good existing = shelf.findGood(newGood.getDescription(), newGood.getWeight());
                     if (existing != null) {
                         return shelf;
@@ -69,55 +75,10 @@ public class ShelfAllocationService {
         return null;
     }
 
-    private Shelf findShelfWithSimilarGoods(Good newGood, DoublyLinkedList<FloorArea> floorAreas) {
-        Node<FloorArea> floorNode = floorAreas.getHead();
-        while (floorNode != null) {
-            FloorArea floorArea = floorNode.getValue();
-            Node<Aisle> aisleNode = floorArea.getAisles().getHead();
-
-            while (aisleNode != null) {
-                Aisle aisle = aisleNode.getValue();
-                // Check if aisle temperature matches
-                if (aisle.getTemperature().equalsIgnoreCase(newGood.getTemperature())) {
-                    Node<Shelf> shelfNode = aisle.getShelves().getHead();
-
-                    while (shelfNode != null) {
-                        Shelf shelf = shelfNode.getValue();
-                        // Check if shelf has goods with similar description
-                        if (hasSimilarGoods(shelf, newGood.getDescription())) {
-                            return shelf;
-                        }
-                        shelfNode = shelfNode.getNext();
-                    }
-                }
-                aisleNode = aisleNode.getNext();
-            }
-            floorNode = floorNode.getNext();
-        }
-        return null;
-    }
-
-    private boolean hasSimilarGoods(Shelf shelf, String description) {
-        if (description == null || description.trim().isEmpty()) {
-            return false;
-        }
-
-        String[] keywords = description.toLowerCase().split(" ");
-        Node<Good> goodNode = shelf.getGoodsList().getHead();
-
-        while (goodNode != null) {
-            Good existingGood = goodNode.getValue();
-            String existingDesc = existingGood.getDescription().toLowerCase();
-
-            for (String keyword : keywords) {
-                if (keyword.length() > 3 && existingDesc.contains(keyword)) {
-                    return true;
-                }
-            }
-            goodNode = goodNode.getNext();
-        }
-        return false;
-    }
+    /**
+     * Check all the shelves that contains same temperature goods
+     *
+     */
 
     private Shelf findShelfWithMatchingTemperature(String temperature, DoublyLinkedList<FloorArea> floorAreas) {
         Node<FloorArea> floorNode = floorAreas.getHead();
@@ -140,6 +101,11 @@ public class ShelfAllocationService {
         return null;
     }
 
+    /**
+     * Find the first available shelf
+     * @param floorAreas doublylinkedlist of all floorareas
+     * @return first available shelf
+     */
     private Shelf findFirstAvailableShelf(DoublyLinkedList<FloorArea> floorAreas) {
         Node<FloorArea> floorNode = floorAreas.getHead();
         while (floorNode != null) {

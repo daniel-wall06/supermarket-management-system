@@ -4,15 +4,22 @@ import linkedlist.DoublyLinkedList;
 import linkedlist.Node;
 import models.*;
 
-public class GoodSearchService {
-
+/**
+ * Search for a specified good
+ */
+public class GoodSearch {
+    /**
+     * Search through each floorArea then aisle and finally shelf to find matching.
+     * @param searchTerm search query input from user
+     * @param floorAreas doubly link list of floorareas
+     * @return the result of the search
+     */
     public SearchResult searchGoods(String searchTerm, DoublyLinkedList<FloorArea> floorAreas) {
         SearchResult result = new SearchResult(searchTerm);
 
         if (floorAreas == null || searchTerm == null || searchTerm.trim().isEmpty()) {
             return result;
         }
-
         Node<FloorArea> floorNode = floorAreas.getHead();
         while (floorNode != null) {
             FloorArea floorArea = floorNode.getValue();
@@ -35,6 +42,9 @@ public class GoodSearchService {
         return result;
     }
 
+    /**
+     * Search through a specified shelf to find a good
+     */
     private void searchShelf(Shelf shelf, FloorArea floorArea, Aisle aisle,
                              String searchTerm, SearchResult result) {
         Node<Good> goodNode = shelf.getGoodsList().getHead();
